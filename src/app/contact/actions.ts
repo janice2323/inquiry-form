@@ -1,7 +1,9 @@
 "use server";
 
+import { after } from "next/server";
 import { db } from "@/db";
 import { inquiries } from "@/db/schema";
+import { sendInquiryNotification } from "@/lib/notify";
 
 export type SubmitState =
   | { status: "idle" }
@@ -41,6 +43,10 @@ export async function submitInquiry(
       values,
     };
   }
+
+  // Send the email after responding so a slow or failed send never blocks
+  // or fails the submission.
+  after(() => sendInquiryNotification(values));
 
   return { status: "success" };
 }
