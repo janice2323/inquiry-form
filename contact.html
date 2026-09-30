@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>문의하기</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>Inquiry Form 프로젝트</h1>
+  <nav>
+    <a href="index.html">홈</a>
+    <a href="contact.html">문의하기</a>
+  </nav>
+</header>
+<main>
+  <h2>문의 폼</h2>
+  <form id="contact-form">
+    <label for="name">이름</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="email">이메일</label>
+    <input type="email" id="email" name="email" required>
+
+    <label for="message">문의 내용</label>
+    <textarea id="message" name="message" rows="5" required></textarea>
+
+    <button type="submit">제출</button>
+  </form>
+
+  <section id="result" class="hidden">
+    <h3>입력하신 내용</h3>
+    <p><strong>이름:</strong> <span id="result-name"></span></p>
+    <p><strong>이메일:</strong> <span id="result-email"></span></p>
+    <p><strong>문의 내용:</strong> <span id="result-message"></span></p>
+  </section>
+</main>
+<script src="script.js"></script>
+</body>
+</html>
