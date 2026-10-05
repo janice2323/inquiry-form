@@ -1,11 +1,12 @@
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { db } from "@/db";
-import { inquiries } from "@/db/schema";
+import { inquiries, inquiryNotes } from "@/db/schema";
 import { formatDate } from "../format";
 import { DeleteButton } from "./delete-button";
 import { EditForm } from "./edit-form";
+import { Notes } from "./notes";
 
 export default async function InquiryDetailPage({
   params,
@@ -16,11 +17,14 @@ export default async function InquiryDetailPage({
     notFound();
   }
 
-  const [inquiry] = await db
-    .select()
-    .from(inquiries)
-    .where(eq(inquiries.id, id))
-    .limit(1);
+  const [[inquiry], notes] = await Promise.all([
+    db.select().from(inquiries).where(eq(inquiries.id, id)).limit(1),
+    db
+      .select()
+      .from(inquiryNotes)
+      .where(eq(inquiryNotes.inquiryId, id))
+      .orderBy(asc(inquiryNotes.createdAt), asc(inquiryNotes.id)),
+  ]);
   if (!inquiry) {
     notFound();
   }
@@ -52,6 +56,8 @@ export default async function InquiryDetailPage({
           message: inquiry.message,
         }}
       />
+
+      <Notes inquiryId={inquiry.id} notes={notes} />
 
       <DeleteButton id={inquiry.id} />
     </main>
